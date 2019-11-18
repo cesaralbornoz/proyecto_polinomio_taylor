@@ -19,22 +19,18 @@ def derivada(f, h = 0.01):
 
     return _
 
-def operaciones(f,x0,n,x):
-    contador=0
-    px=0
-    aux=0
-    while contador<n:
-        if contador==0:
-            px=f(x0)
-            contador=contador+1
-        else:
-            dfs=derivada(f)
-            f=dfs
-            aux=(dfs(x0)*((x-x0)**contador))
-            aux=aux/math.factorial(contador)
-            px+=aux
-            contador=contador+1
+def operaciones(f,x0,n,x, px, contador):
+  if contador < n: 
+    if contador == 0:
+      px = f(x0)
+      return operaciones(f, x0, n, x, px, contador+1)
+    else:
+      f = derivada(f)
+      px += (f(x0) * pow((x-x0), contador)) / math.factorial(contador)
+      return operaciones(f, x0, n, x, px, contador+1)
+  else:
     return px
+
 def polinomio_taylor(f, x0, n):
     """
     Implementa y retorna el Polinomio de Taylor de grado n centrado en x0.
@@ -45,7 +41,7 @@ def polinomio_taylor(f, x0, n):
     n: grado del polinomio.
     """
     def __(x):
-        po=operaciones(f,x0,n,x)
+        po = operaciones(f, x0, n, x, 0, 0)
         return po
     return __
 
